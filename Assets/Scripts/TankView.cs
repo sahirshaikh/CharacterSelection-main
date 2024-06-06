@@ -4,22 +4,50 @@ using UnityEngine;
 
 public class TankView : MonoBehaviour
 {
-    [SerializeField] private TankController tankController;
-    // Start is called before the first frame update
+    private TankController tankController;
+    [SerializeField] private Rigidbody _rigidbody;
+    private float movement;
+    private float roatation;
+
     void Start()
     {
-        
+        GameObject cam = GameObject.Find("Main Camera");
+        cam.transform.SetParent(transform);
+        cam.transform.position = new Vector3(0.0001f, 3f,-4f);
+
     }
 
-    // Update is called once per frame
     void Update()
     {
+        Movement();
+
+        if(movement!=0)
+        {
+            tankController.Move(movement,tankController.GetTankModel().movementSpeed);
+        }
+
+        if(roatation!=0)
+        {
+            tankController.Rotate(roatation,tankController.GetTankModel().rotationSpeed);
+        }
         
     }
 
-        public void SetTankController(TankController _tankController)
+    private void Movement()
+    {
+        movement = Input.GetAxis("Vertical");
+        roatation = Input.GetAxis("Horizontal");
+
+    }
+
+    public void SetTankController(TankController _tankController)
     {
         tankController = _tankController;
+    }
+
+    public Rigidbody GetRigidBody()
+    {
+        return _rigidbody;
     }
 
 }
